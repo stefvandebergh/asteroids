@@ -23,7 +23,7 @@ def main():
     font = pygame.font.Font('freesansbold.ttf', 32)
     text = font.render(str(score), True, "white")
     text_rect = text.get_rect()
-    text_rect.center = (SCREEN_WIDTH/2, 200)
+    text_rect.center = (SCREEN_WIDTH/2, 50)
 
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
