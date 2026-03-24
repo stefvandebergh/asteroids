@@ -7,15 +7,23 @@ from asteroid import Asteroid
 from asteroidfield import AsteroidField
 from shot import Shot
 
+score = 0
+
 def main():
     print(f"Starting Asteroids with pygame version: {pygame.version.ver}")
     print(f"Screen width: {SCREEN_WIDTH}")
     print(f"Screen height: {SCREEN_HEIGHT}")
     pygame.init()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-    
+    pygame.display.set_caption('Asteroids incoming!')
+
     clock = pygame.time.Clock()
     dt = 0
+
+    font = pygame.font.Font('freesansbold.ttf', 32)
+    text = font.render(str(score), True, "white")
+    text_rect = text.get_rect()
+    text_rect.center = (SCREEN_WIDTH/2, 200)
 
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
@@ -35,7 +43,10 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
+        
         screen.fill("black")
+        text = font.render(str(player.get_score()), True, "white")
+        screen.blit(text, text_rect)
 
         updatable.update(dt)
         for element in drawable:
@@ -50,7 +61,7 @@ def main():
                 if asteroid.collides_with(shot):
                     log_event("asteroid_shot")
                     shot.kill()
-                    asteroid.split()
+                    asteroid.split(player)
 
         pygame.display.flip()
         dt = clock.tick(60)/1000
