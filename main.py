@@ -62,6 +62,10 @@ def main():
                     log_event("asteroid_shot")
                     shot.kill()
                     asteroid.split(player)
+            for other_asteroid in asteroids:
+                if asteroid.collides_with(other_asteroid):
+                    log_event("asteroids_collided")
+                    asteroid.bounce(other_asteroid)
 
         pygame.display.flip()
         dt = clock.tick(60)/1000

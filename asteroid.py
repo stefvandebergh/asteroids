@@ -36,3 +36,34 @@ class Asteroid(CircleShape):
             point = self.position + pygame.Vector2(0,1).rotate(ANGLES[angle_i])*diff
             pointlist.append(point)
         return pointlist
+
+    # proposed by ChatGPT
+    def bounce(self, other_asteroid):
+        offset = other_asteroid.position - self.position
+        distance = offset.length()
+
+        if distance == 0:
+            return
+
+        normal = offset / distance
+
+        # Push overlapping asteroids apart
+        overlap = self.radius + other_asteroid.radius - distance
+        if overlap > 0:
+            correction = normal * (overlap / 2)
+            self.position -= correction
+            other_asteroid.position += correction
+
+        # Relative velocity along collision normal
+        relative_velocity = self.velocity - other_asteroid.velocity
+        speed_along_normal = relative_velocity.dot(normal)
+
+        # If they are already moving apart, do nothing
+        if speed_along_normal > 0:
+            return
+
+        # Equal-mass elastic collision:
+        # swap the normal components of velocity
+        impulse = normal * speed_along_normal
+        self.velocity -= impulse
+        other_asteroid.velocity += impulse
